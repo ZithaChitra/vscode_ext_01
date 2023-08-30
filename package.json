@@ -1,10 +1,10 @@
 {
   "name": "vscode-ext-test",
   "displayName": "vscode-ext-test",
-  "description": "demo staff",
+  "description": "demo ext",
   "version": "0.0.1",
   "engines": {
-    "vscode": "^1.80.1"
+    "vscode": "^1.81.0"
   },
   "categories": [
     "Other"
@@ -14,19 +14,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "vscode-ext-test.helloWorld",
-        "category": "demo-pack",
+        "command": "vscode-ext-test.createFlow",
         "title": "Hello World"
-      },
-      {
-        "command": "vscode-ext-test.addColor",
-        "category": "demo-pack",
-        "title": "Add Color"
-      },
-      {
-        "command": "vscode-ext-test.clearColors",
-        "category": "demo-pack",
-        "title": "Clear Colors"
       }
     ]
   },
