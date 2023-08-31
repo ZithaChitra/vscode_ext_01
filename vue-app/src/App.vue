@@ -1,6 +1,16 @@
 <script setup>
 import HelloWorld from './components/HelloWorld.vue'
 import TheWelcome from './components/TheWelcome.vue'
+// import * as vscode from 'vscode'
+
+
+vscode.postMessage({
+        message: 'chitra extension can listen to vue events by using postMessage method!'
+      })
+
+console.log('assetsUri: ',assetsUri)
+console.log('assetsWebViewUri: ', assetsWebviewUri)
+
 </script>
 
 <template>

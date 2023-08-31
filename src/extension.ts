@@ -5,33 +5,30 @@ export function activate(context: vscode.ExtensionContext) {
 
 	console.log('Congratulations, your extension "vscode-ext-test" is now active!');
 
-	let disposable = vscode.commands.registerCommand('vscode-ext-test.helloWorld', () => {
-		vscode.window.showInformationMessage('Hello World from vscode-ext-test!');
-	});
+	context.subscriptions.push(
+		vscode.commands.registerCommand(`vscode-ext-test.createFlow`, () => {
+				vscode.window.showInformationMessage(
+					"Opening vue generated webview inside extension!"
+				);
+				console.log('extention root path: ', context.extensionPath)
+				const panel = prepareWebView(context);
 
-	context.subscriptions.push(disposable);
+				panel.webview.onDidReceiveMessage(
+					async ({ message }) => {
+						vscode.window.showInformationMessage(message);
+					},
+					undefined,
+					context.subscriptions
+				);
+			}
+		)
+	)
 
-
-    let kindDisposable = vscode.commands.registerCommand(
-        `vscode-ext-test.createFlow`,
-        () => {
-            // The code you place here will be executed every time your command is executed
-            // Display a message box to the user
-            vscode.window.showInformationMessage(
-                "Opening vue generated webview inside extension!"
-            );
-            const panel = prepareWebView(context);
-
-            panel.webview.onDidReceiveMessage(
-                async ({ message }) => {
-                    vscode.window.showInformationMessage(message);
-                },
-                undefined,
-                context.subscriptions
-            );
-        }
-    );
-    context.subscriptions.push(kindDisposable);
+	context.subscriptions.push(
+		vscode.commands.registerCommand('vscode-ext-test.openVueApp', () => {
+			vscode.window.showInformationMessage('Opening Vue App !')
+		})
+	)
 }
 
 export function deactivate() {}
@@ -47,11 +44,14 @@ export function prepareWebView(context: vscode.ExtensionContext) {
                 vscode.Uri.file(
                     path.join(context.extensionPath, "vue-build", "assets")
                 ),
+                vscode.Uri.file(
+                    path.join(context.extensionPath, "vue-app", "assets")
+                ),
             ],
         }
     );
 
-    const dependencyNameList: string[] = [
+    const dependencyNameList = [
         "index.css",
         "index.js",
         "vendor.js",
@@ -64,6 +64,8 @@ export function prepareWebView(context: vscode.ExtensionContext) {
             )
         )
     );
+    const assetsUri = vscode.Uri.file(path.join(context.extensionPath, 'vue-build', 'assets'));
+    const assetsWebviewUri = panel.webview.asWebviewUri(assetsUri);
     const html = `<!DOCTYPE html>
   <html lang="en">
   <head>
@@ -72,7 +74,9 @@ export function prepareWebView(context: vscode.ExtensionContext) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite App</title>
     <script>
-          const vscode = acquireVsCodeApi();
+            const vscode = acquireVsCodeApi();
+            const assetsUri = ${assetsUri};
+            const assetsWebviewUri = ${assetsWebviewUri};
     </script>
     <script type="module" crossorigin src="${dependencyList[1]}"></script>
     <link rel="stylesheet" href="${dependencyList[0]}">

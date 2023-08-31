@@ -4,7 +4,7 @@
   "description": "demo ext",
   "version": "0.0.1",
   "engines": {
-    "vscode": "^1.81.0"
+    "vscode": "^1.80.1"
   },
   "categories": [
     "Other"
@@ -15,7 +15,13 @@
     "commands": [
       {
         "command": "vscode-ext-test.createFlow",
-        "title": "Hello World"
+        "title": "Hello World",
+        "category": "demo"
+      },
+      {
+        "command": "vscode-ext-test.openVueApp",
+        "title": "Open Vue App",
+        "category": "demo"
       }
     ]
   },
