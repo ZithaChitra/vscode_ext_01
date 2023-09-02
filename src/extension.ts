@@ -8,9 +8,9 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		vscode.commands.registerCommand(`vscode-ext-test.createFlow`, () => {
 				vscode.window.showInformationMessage(
-					"Opening vue generated webview inside extension!"
+					"Task Man Init"
 				);
-				console.log('extention root path: ', context.extensionPath)
+				// console.log('extention root path: ', context.extensionPath)
 				const panel = prepareWebView(context);
 
 				panel.webview.onDidReceiveMessage(
@@ -26,7 +26,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand('vscode-ext-test.openVueApp', () => {
-			vscode.window.showInformationMessage('Opening Vue App !')
+			vscode.window.showInformationMessage('Task Man Init')
 		})
 	)
 }
