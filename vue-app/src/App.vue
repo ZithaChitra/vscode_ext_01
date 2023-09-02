@@ -1,13 +1,12 @@
 <script setup>
-import { ref } from 'vue'
+import { reactive } from 'vue'
+
 // import HelloWorld from './components/HelloWorld.vue'
 // import TheWelcome from './components/TheWelcome.vue'
 // import * as vscode from 'vscode'
 
 
-
-
-let backlogTasks = ref({
+let backlogTasks = reactive({
   item1ID: {
     id: 'item1ID',
     title: 'Item 1',
@@ -26,7 +25,7 @@ let backlogTasks = ref({
 });
 
 
-let inDevTasks = ref({
+let inDevTasks = reactive({
   item5ID: {
     id: 'item5ID',
     title: 'Item 5',
@@ -34,7 +33,7 @@ let inDevTasks = ref({
   },
 })
 
-let completedTasks = ref({
+let completedTasks = reactive({
   item8ID: {
     id: 'item8ID',
     title: 'Item 8',
@@ -43,7 +42,7 @@ let completedTasks = ref({
 });
 
 
-let allowedStatuses = {
+let allowedStatuses = reactive({
   backlog: {
     isAllowed: true,
     tasks: backlogTasks,
@@ -56,19 +55,21 @@ let allowedStatuses = {
     isAllowed: true,
     tasks: completedTasks
   },
-}
+})
+
 
 function updateTaskStatus(task, updatedStatus) {
-  console.log(allowedStatuses)
   console.log('updated status: ', updatedStatus)
-  if(updatedStatus in allowedStatuses && allowedStatuses[updatedStatus].isAllowed){
-    if(!(task.id in allowedStatuses[updatedStatus].value)){
-      allowedStatuses[updatedStatus].tasks.value[task.id] = task
 
-      delete allowedStatuses[task.status].tasks.value[task.id]
+  if (updatedStatus in allowedStatuses && allowedStatuses[updatedStatus].isAllowed) {
+    if (!(task.id in allowedStatuses[updatedStatus])) {
+      delete allowedStatuses[task.status].tasks[task.id]
+      task.status = updatedStatus
+      allowedStatuses[updatedStatus].tasks[task.id] = task
     }
   }
 }
+
 
 </script>
 
@@ -76,7 +77,7 @@ function updateTaskStatus(task, updatedStatus) {
 
 <template>
   <div class="text-white p-5">
-    <h2 class="text-center text-xl mb-10">  
+    <h2 class="text-center text-xl mb-10">
       Task Manager
     </h2>
 
@@ -84,31 +85,46 @@ function updateTaskStatus(task, updatedStatus) {
       <div class="border rounded p-2">
         <h3 class="border-b-4 border-white text-lg mb-5">BackLog</h3>
         <ul>
-          <li v-for="itemID in backlogTasks" :key="itemID"
-            @click="updateTaskStatus(itemID, 'completed')"
-            class="border border-gray-100 rounded p-1 mb-1">
-            <p>{{ itemID.title }} </p>
+          <li v-for="itemID in backlogTasks" :key="itemID" class="border border-gray-100 rounded p-1 mb-3">
+            <div class="grid grid-cols-12 gap-1">
+              <p class="col-span-6">{{ itemID.title }}</p>
+              <button @click="updateTaskStatus(itemID, 'indevelopment')"
+                class="col-span-3 border rounded text-center">dev</button>
+              <button @click="updateTaskStatus(itemID, 'completed')"
+                class="col-span-3 border rounded text-center">done</button>
+            </div>
           </li>
         </ul>
       </div>
       <div class="border rounded p-2">
         <h3 class="border-b-4 border-white text-lg mb-5">In Development</h3>
         <ul>
-          <li v-for="itemID in inDevTasks" :key="itemID"
-            class="border border-gray-100 rounded p-1 mb-1">
-            <p>{{ itemID.title }} </p>
+          <li v-for="itemID in inDevTasks" :key="itemID" class="border border-gray-100 rounded p-1 mb-3">
+            <div class="grid grid-cols-12 gap-1">
+              <p class="col-span-6">{{ itemID.title }}</p>
+              <button @click="updateTaskStatus(itemID, 'backlog')"
+                class="col-span-3 border rounded text-center">backlog</button>
+              <button @click="updateTaskStatus(itemID, 'completed')"
+                class="col-span-3 border rounded text-center">done</button>
+            </div>
           </li>
         </ul>
       </div>
       <div class="border rounded p-2">
         <h3 class="border-b-4 border-white text-lg mb-5">Completed</h3>
         <ul>
-          <li v-for="itemID in completedTasks" :key="itemID"
-            class="border border-gray-100 rounded p-1 mb-1">
-            <p>{{ itemID.title }} </p>
+          <li v-for="itemID in completedTasks" :key="itemID" class="border border-gray-100 rounded p-1 mb-3">
+            <div class="grid grid-cols-12 gap-1">
+              <p class="col-span-6">{{ itemID.title }}</p>
+              <button @click="updateTaskStatus(itemID, 'backlog')"
+                class="col-span-3 border rounded text-center">backlog</button>
+              <button @click="updateTaskStatus(itemID, 'indevelopment')"
+                class="col-span-3 border rounded text-center">dev</button>
+            </div>
           </li>
         </ul>
       </div>
     </div>
   </div>
+
 </template>
