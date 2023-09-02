@@ -35,8 +35,8 @@ export function deactivate() {}
 
 export function prepareWebView(context: vscode.ExtensionContext) {
     const panel = vscode.window.createWebviewPanel(
-        "vueWebview",
-        "vue webview",
+        "TaskMan",
+        "Task Man",
         vscode.ViewColumn.One,
         {
             enableScripts: true,
