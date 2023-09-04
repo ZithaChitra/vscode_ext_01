@@ -1,8 +1,8 @@
 {
-  "name": "vscode-ext-test",
-  "displayName": "vscode-ext-test",
+  "name": "Task-Man",
+  "displayName": "Task Man",
   "publisher": "BlessingChitra",
-  "description": "demo ext",
+  "description": "Task manager",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.80.1"
@@ -15,12 +15,12 @@
   "contributes": {
     "commands": [
       {
-        "command": "vscode-ext-test.createFlow",
+        "command": "Task-Man.createFlow",
         "title": "Open Task Man",
         "category": "taskman"
       },
       {
-        "command": "vscode-ext-test.openVueApp",
+        "command": "Task-Man.openVueApp",
         "title": "Open Vue App",
         "category": "taskman"
       }

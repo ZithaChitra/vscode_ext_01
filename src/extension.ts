@@ -3,10 +3,10 @@ import * as path from 'path'
 
 export function activate(context: vscode.ExtensionContext) {
 
-	console.log('Congratulations, your extension "vscode-ext-test" is now active!');
+	console.log('Congratulations, your extension "Task Man" is now active!');
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand(`vscode-ext-test.createFlow`, () => {
+		vscode.commands.registerCommand(`Task-Man.createFlow`, () => {
 				vscode.window.showInformationMessage(
 					"Task Man Init"
 				);
@@ -25,7 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
 	)
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('vscode-ext-test.openVueApp', () => {
+		vscode.commands.registerCommand('Task-Man.openVueApp', () => {
 			vscode.window.showInformationMessage('Task Man Init')
 		})
 	)
