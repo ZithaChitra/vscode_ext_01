@@ -24,7 +24,7 @@ function updateManagePageActive(tabName){
 </script>
 
 <template>
-  <div class="md:grid grid-cols-12 gap-2">
+  <div v-show="managePageActive == 'tasks'" class="md:grid grid-cols-12 gap-2">
     <div class="hidden md:block col-span-3"></div>
     <div class="col-span-4 flex justify-between text-black mb-2">
       <h3 class="text-white mr-4">Project</h3>
@@ -58,7 +58,20 @@ function updateManagePageActive(tabName){
         </ul>
       </div>
       <div class="col-span-9 ">
-        <TasksManage :projectTasks="store.getProjectTasks(activeProject)"/>
+        <TasksManage :projectTasks="store.getProjectTasks(activeProject)" :activeProjId="activeProject"
+          v-show="managePageActive == 'tasks'"/>
+        <div class="flex justify-center items-center" 
+          v-show="managePageActive == 'projects'">
+          <p>
+            projects manage cmpo
+          </p>
+        </div>
+        <div class="flex justify-center items-center"
+          v-show="managePageActive == 'settings'">
+          <p>
+            Other Settings Comp
+          </p>
+        </div>
       </div>
     </div>
 </template>

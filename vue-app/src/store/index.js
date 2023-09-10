@@ -87,9 +87,11 @@ const useTaskManStore = defineStore('taskmanstore', {
 
     getters: {
         getTaskById(state){
-            return (taskId) => {
-                if(taskId in state.tasks){
-                    return state.tasks[taskId]
+            return (taskId, statusFilter=['backlog']) => {
+                for(let currState of statusFilter){
+                    if(taskId in state.tasks[currState]){
+                        return state.tasks[currState][taskId]
+                    }
                 }
                 return null
             }
@@ -140,12 +142,25 @@ const useTaskManStore = defineStore('taskmanstore', {
               this.tasks.backlog[key] = {
                 id:     key,
                 title:  newTask.title,
-                desc:   newTask.description ?? '',
-                status: 'backlog'
+                desc:   newTask.desc ?? '',
+                status: 'backlog',
+                projectId: newTask.projectId
               }
           
               newTask.title = ''
-              newTask.description = ''
+              newTask.desc = ''
+
+              console.log('task added to backlog')
+              console.log(this.tasks.backlog[key])
+            }
+        },
+
+        updateTask(task, statusFilter = ['backlog', 'indevelopment', 'completed']){
+            let { id } = task
+            for(let currState of statusFilter){
+                if(id in this.tasks[currState]){
+                    this.tasks[currState][id] = task
+                }
             }
         },
         // ----------- Tasks -------------------------------------------
