@@ -2,8 +2,24 @@
 
 import { defineProps } from 'vue'
 
-
-let props = defineProps(['title', 'data', 'onEdit', 'onAdd']);
+let props = defineProps({
+    title: {
+        type: String,
+        default: 'List Title'
+    }, 
+    data: {
+        type: Array,
+        default: () => []
+    }, 
+    onEdit: {
+        type: Function,
+        required: true
+    }, 
+    onAdd: {
+        type: Function,
+        required: true
+    }
+});
 
 </script>
 
@@ -14,13 +30,13 @@ let props = defineProps(['title', 'data', 'onEdit', 'onAdd']);
         <div class="md:grid grid-cols-12 p-2 pb-0 gap-4 ">
             <div class="col-span-6">
                 <div class="flex justify-between border-b p-1">
-                    <h3>{{ props.title ?? 'List Title' }}</h3>
+                    <h3>{{ title  }}</h3>
                     <button @click="onAdd"
                         class="bg-primary text-black px-2 rounded hover:bg-white">Create New</button>
                 </div>
             </div>
         </div>
-        <div class="md:grid grid-cols-12 p-2 gap-4">
+        <div class="md:grid grid-cols-12 p-2 gap-10">
             <!-- list col -->
             <div class="col-span-6">
                 <ul v-if="data">

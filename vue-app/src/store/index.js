@@ -172,7 +172,10 @@ const useTaskManStore = defineStore('taskmanstore', {
             let { id } = task
             for(let currState of statusFilter){
                 if(id in this.tasks[currState]){
-                    this.tasks[currState][id] = task
+                    this.tasks[currState][id].title     = task.title
+                    this.tasks[currState][id].status    = task.status
+                    this.tasks[currState][id].projectId = task.projectId
+                    this.tasks[currState][id].desc      = task.desc
                 }
             }
         },

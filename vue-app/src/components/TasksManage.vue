@@ -1,33 +1,31 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import useTaskManStore from '../store/index.js'
-
-
+import ListEditor from './ListEditor.vue'
 
 const props = defineProps(['projectTasks', 'activeProjId'])
 const store = useTaskManStore()
 
 let currAction = ref('');
-onMounted(()=>{
-})
 
 
 let newTask = reactive({
-  title: '',
-  desc:  '',
-  projectId: props.activeProject
+    title:     '',
+    desc:      '',
+    projectId: props.activeProject
 })
 
 let taskToUpdate = reactive({
-  title: '',
-  desc:  '',
-  projectId: props.activeProjId,
-  status: 'backlog',
-  userId: 1
+    id:         '',
+    title:      '',
+    desc:       '',
+    projectId:  props.activeProjId,
+    status:     'backlog',
+    userId:     1
 })
 
 const allowedActions = {
-    add: true,
+    add:  true,
     edit: true
 }
 
@@ -37,50 +35,66 @@ function saveNewTask(){
     store.saveNewTask(newTask)
 }
 
-function changeTaskToUpdate(taskId){
-    taskToUpdate = store.getTaskById(taskId)
-    console.log(taskToUpdate)
+function resetTaskToUpdate(){
+    taskToUpdate.id        = ''
+    taskToUpdate.title     = ''
+    taskToUpdate.desc      = ''
+    taskToUpdate.projectId = ''
+    taskToUpdate.status    = ''
 }
 
-function openTaskEditForm(taskId){
-    changeTaskToUpdate(taskId);
-    updateCurrAction('edit')
+function changeTaskToUpdate(taskId){
+    resetTaskToUpdate()
+    let task = store.getTaskById(taskId)
+    if(task){
+        taskToUpdate.id         = task.id
+        taskToUpdate.title      = task.title
+        taskToUpdate.desc       = task.desc
+        taskToUpdate.projectId  = task.projectId
+        taskToUpdate.status     = task.status
+        return true
+    }
+
+    console.log(taskToUpdate)
+    return false
 }
 
 function updateTask(){
-    store.updateTask(taskToUpdate)
+    if(taskToUpdate.id){
+        store.updateTask(taskToUpdate)
+        resetTaskToUpdate()
+        updateCurrAction('')
+    }
 }
 
 function updateCurrAction(action){
-    if(action in allowedActions){
+    if(action in allowedActions || action == ''){
         currAction.value = action
+    }
+}
+
+function onAddHandler(){
+    currAction.value = 'add'
+}
+
+function onEditHandler(taskId){
+    console.log('Edit Handler')
+    let canEdit = changeTaskToUpdate(taskId);
+    if(canEdit){
+        updateCurrAction('edit')
     }
 }
 
 </script>
 
 <template>
-    <div class="md:grid grid-cols-12 p-2 gap-4 border rounded-md">
-        <div class="col-span-6">
-            <div class="flex justify-between border-b p-1 mb-2">
-                <h3>All Tasks</h3>
-                <button @click="updateCurrAction('add')"
-                    class="bg-primary text-black px-2 rounded hover:bg-white">Add New Task</button>
-            </div>
-            <ul>
-                <li>
-                    <div v-for="task of props.projectTasks" :key="task.id"
-                        class="flex justify-between">
-                        <p>{{ task.title }}</p>
-                        <button 
-                            @click="openTaskEditForm(task.id)">Edit</button>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div class="col-span-6">
+
+    <ListEditor title="Project Tasks" :data="projectTasks" 
+        :onAdd="onAddHandler" :onEdit="onEditHandler">
+
+        <template v-slot:action>
             <div v-show="currAction == 'edit'">
-                <h2 class="text-lg mb-5 border-b-4 border-white text-center">Task Details</h2>
+                <h2 class="text-center">Edit Task</h2>
                 <div>
                     <div class="mb-3">
                         <label class="block mb-2 text-sm font-medium text-white" for="taskTitle">Task Title</label>
@@ -121,7 +135,7 @@ function updateCurrAction(action){
                 
             </div>
             <div v-show="currAction == 'add'">
-                <h2 class="text-lg mb-5 border-b-4 border-white text-center">New Task</h2>
+                <h2 class="text-center">New Task</h2>
                 <div>
                     <div class="mb-3">
                         <label class="block mb-2 text-sm font-medium text-white" for="taskTitle">Task Title</label>
@@ -146,6 +160,7 @@ function updateCurrAction(action){
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </template>
+
+    </ListEditor>
 </template>
