@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import useTaskManStore from '../store/index.js'
 import TasksManage from '../components/TasksManage.vue'
+import ProjectsManage from '../components/ProjectsManage.vue'
 
 const store = useTaskManStore()
 let managePageActive = ref('tasks')
@@ -18,8 +19,6 @@ function updateManagePageActive(tabName){
     managePageActive.value = tabName
   }
 }
-
-
 
 </script>
 
@@ -60,12 +59,11 @@ function updateManagePageActive(tabName){
       <div class="col-span-9 ">
         <TasksManage :projectTasks="store.getProjectTasks(activeProject)" :activeProjId="activeProject"
           v-show="managePageActive == 'tasks'"/>
-        <div class="flex justify-center items-center" 
-          v-show="managePageActive == 'projects'">
-          <p>
-            projects manage cmpo
-          </p>
-        </div>
+
+        
+        <ProjectsManage  v-show="managePageActive == 'projects'" />
+        
+
         <div class="flex justify-center items-center"
           v-show="managePageActive == 'settings'">
           <p>

@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { v4 as uuidv4 } from 'uuid'
 
 const useTaskManStore = defineStore('taskmanstore', {
     state: () => {
@@ -112,6 +113,25 @@ const useTaskManStore = defineStore('taskmanstore', {
                 return []
             }
         },
+
+        getAllProjectsAsArray(state){
+            const projects  = Object.keys(state.projects)
+            let projectsArr = []
+            projects.forEach(projKey => {
+                projectsArr.push(state.projects[projKey])
+            });
+            return projectsArr
+        },
+
+        getProjectById(state){
+            return (projId) => {
+                if(projId in state.projects){
+                    return state.projects[projId]
+                }
+
+                return null
+            }
+        },
     },
 
     actions: {
@@ -132,26 +152,19 @@ const useTaskManStore = defineStore('taskmanstore', {
         },
 
         saveNewTask(newTask){
-            function getRandomInt(max) {
-                return Math.floor(Math.random() * max);
-            }
-
             if(newTask.title){
-              const key = getRandomInt(10000).toString() + getRandomInt(100).toString()
-              console.log('random key: ', key)
+              const key = uuidv4()
               this.tasks.backlog[key] = {
-                id:     key,
-                title:  newTask.title,
-                desc:   newTask.desc ?? '',
-                status: 'backlog',
+                id:        key,
+                title:     newTask.title,
+                desc:      newTask.desc ?? '',
+                status:    'backlog',
                 projectId: newTask.projectId
               }
           
               newTask.title = ''
-              newTask.desc = ''
+              newTask.desc  = ''
 
-              console.log('task added to backlog')
-              console.log(this.tasks.backlog[key])
             }
         },
 
@@ -172,7 +185,26 @@ const useTaskManStore = defineStore('taskmanstore', {
                 this.activeProject = this.projects[projectId]
             }
             return
-        }
+        },
+
+
+        saveNewProject(newProject){
+            // TODO: check if project title already exists
+            const id = uuidv4()
+            newProject['id'] = id
+            this.projects[id] = {
+                id:     newProject.id,
+                title:  newProject.title,
+                userId: newProject.userId
+            }
+        },
+
+        updateProject(proj){
+            if(proj.id in this.projects){
+                this.projects[proj.id].title = proj.title
+            }
+
+        },
 
         // ----------- Projects -------------------------------------------
     }

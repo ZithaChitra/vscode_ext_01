@@ -22,8 +22,6 @@ function updateActivePage(pageName){
 
 </script>
 
-  
-
 <template>
   <div class="text-white p-5">
     <h2 class="text-center text-xl mb-10">

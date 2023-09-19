@@ -13,6 +13,7 @@
     "@types/vscode": "^1.81.0",
     "cd": "^0.3.3",
     "pinia": "^2.1.6",
+    "uuid": "^9.0.1",
     "vscode-ext-test": "file:..",
     "vue": "^3.3.4"
   },
