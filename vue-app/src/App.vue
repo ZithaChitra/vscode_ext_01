@@ -1,22 +1,21 @@
 <script setup>
 
-import { ref} from 'vue'
-// import store from './store/index.js'
+import { ref } from 'vue'
 import Tasks from './pages/Tasks.vue'
 import Manage from './pages/Manage.vue'
-
+import ProjectFilter from './components/ProjectFilter.vue'
 
 
 let page = ref('tasks')
 
 const pages = {
-  tasks:  true,
+  tasks: true,
   manage: true
 }
 
-function updateActivePage(pageName){
-  if(page.value == pageName) return
-  if(pageName in pages){
+function updateActivePage(pageName) {
+  if (page.value == pageName) return
+  if (pageName in pages) {
     page.value = pageName
   }
 }
@@ -29,18 +28,20 @@ function updateActivePage(pageName){
       Task Manager
     </h2>
     <div class="grid grid-cols-12 gap-2 mb-10 border-b">
-      <button 
-        @click="updateActivePage('tasks')"
-        :class="{'border-x border-t rounded-t-lg bg-primary text-black': page == 'tasks'}"
+      <button @click="updateActivePage('tasks')"
+        :class="{ 'border-x border-t rounded-t-lg bg-primary text-black': page == 'tasks' }"
         class="col-span-2 p-2 text-center ">
         Tasks
       </button>
-      <button 
-        @click="updateActivePage('manage')"
-        :class="{'border-x border-t rounded-t-lg bg-primary text-black': page == 'manage'}"
+      <button @click="updateActivePage('manage')"
+        :class="{ 'border-x border-t rounded-t-lg bg-primary text-black': page == 'manage' }"
         class="col-span-2 p-2 text-center">
         Manage
       </button>
+    </div>
+
+    <div>
+      <ProjectFilter />
     </div>
 
     <div v-show="page == 'tasks'">
@@ -52,5 +53,4 @@ function updateActivePage(pageName){
     </div>
 
   </div>
-
 </template>

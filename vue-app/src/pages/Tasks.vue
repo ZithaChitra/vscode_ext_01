@@ -1,7 +1,14 @@
 <script setup>
 import useTaskManStore from '../store/index.js'
+import { watch } from 'pinia'
+import { ref } from 'vue'
 
 const store  = useTaskManStore();
+let activeProject = ref(store.activeProject);
+
+watch(() => store.activeProject, (newVal) => {
+  activeProject.value = newVal
+});
 
 </script>
 
@@ -11,7 +18,7 @@ const store  = useTaskManStore();
     <div class="border rounded p-2 mb-4 md:mb-0">
       <h3 class="border-b-4 border-white text-lg mb-5">BackLog</h3>
       <ul>
-        <li v-for="task in store.tasks.backlog" :key="task.id" class="border border-gray-100 rounded p-1 mb-3">
+        <li v-for="task in store.getProjectTasks(activeProject)" :key="task.id" class="border border-gray-100 rounded p-1 mb-3">
           <div class="grid grid-cols-12 gap-1">
             <p class="col-span-5">{{ task.title }}</p>
             <button @click="store.updateTaskStatus(task, 'indevelopment')"
@@ -30,7 +37,7 @@ const store  = useTaskManStore();
     <div class="border rounded p-2 mb-4 md:mb-0">
       <h3 class="border-b-4 border-white text-lg mb-5">In Development</h3>
       <ul>
-        <li v-for="task in store.tasks.indevelopment" :key="task.id" class="border border-gray-100 rounded p-1 mb-3">
+        <li v-for="task in store.getProjectTasks(activeProject, ['indevelopment'])" :key="task.id" class="border border-gray-100 rounded p-1 mb-3">
           <div class="grid grid-cols-12 gap-1">
             <p class="col-span-5">{{ task.title }}</p>
             <button @click="store.updateTaskStatus(task, 'backlog')"
@@ -49,7 +56,7 @@ const store  = useTaskManStore();
     <div class="border rounded p-2 mb-4 md:mb-0">
       <h3 class="border-b-4 border-white text-lg mb-5">Completed</h3>
       <ul>
-        <li v-for="task in store.tasks.completed" :key="task.id" class="border border-gray-100 rounded p-1 mb-3">
+        <li v-for="task in store.getProjectTasks(activeProject, ['completed'])" :key="task.id" class="border border-gray-100 rounded p-1 mb-3">
           <div class="grid grid-cols-12 gap-1">
             <p class="col-span-5">{{ task.title }}</p>
             <button @click="store.updateTaskStatus(task, 'backlog')"
