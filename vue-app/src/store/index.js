@@ -187,7 +187,7 @@ const useTaskManStore = defineStore('taskmanstore', {
         // ----------- Projects -------------------------------------------
         changeActiveProject(projectId){
             if(projectId in this.projects){
-                this.activeProject = this.projects[projectId]
+                this.activeProject = this.projects[projectId]['id']
             }
             return
         },
@@ -208,7 +208,6 @@ const useTaskManStore = defineStore('taskmanstore', {
             if(proj.id in this.projects){
                 this.projects[proj.id].title = proj.title
             }
-
         },
 
         // ----------- Projects -------------------------------------------

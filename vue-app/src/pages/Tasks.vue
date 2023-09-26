@@ -1,14 +1,27 @@
 <script setup>
 import useTaskManStore from '../store/index.js'
-import { watch } from 'pinia'
-import { ref } from 'vue'
+import { } from 'pinia'
+import { ref, watch } from 'vue'
 
 const store  = useTaskManStore();
 let activeProject = ref(store.activeProject);
 
-watch(() => store.activeProject, (newVal) => {
-  activeProject.value = newVal
-});
+
+watch(store.$state, (state) => {
+  activeProject.value = state.activeProject
+}, {deep: true})
+
+const unsubscribe = store.$onAction(({name}) => {
+  console.log(name)
+})
+
+unsubscribe()
+
+
+
+// watch(() => store.activeProject, (newVal) => {
+//   activeProject.value = newVal
+// });
 
 </script>
 
